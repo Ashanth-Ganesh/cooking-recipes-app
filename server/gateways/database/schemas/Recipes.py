@@ -1,3 +1,9 @@
+from sqlalchemy import Column, Integer, String
+from server.gateways.database.database import Base
+from sqlalchemy import ForeignKey
+from sqlalchemy.dialects.postgresql import ARRAY
+from server.gateways.database.schemas.User import Users
+
 class Recipes(Base):
     __tablename__ = "FavoriteRecipes"
 

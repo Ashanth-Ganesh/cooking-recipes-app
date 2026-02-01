@@ -1,3 +1,6 @@
+from server.gateways.database.database import Base
+from sqlalchemy import Column, Integer, String
+
 class Ingredients(Base):
     __tablename__ = "Ingredients"
 

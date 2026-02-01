@@ -1,3 +1,6 @@
+from sqlalchemy import Column, Integer, String
+from server.gateways.database.database import Base
+
 class Users(Base):
     __tablename__ = "Users"
 

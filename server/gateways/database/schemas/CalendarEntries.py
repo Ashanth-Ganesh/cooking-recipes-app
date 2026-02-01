@@ -1,3 +1,8 @@
+from server.gateways.database.database import Base
+from sqlalchemy import Column, Integer, Date, ForeignKey
+from server.gateways.database.schemas.Recipes import Recipes
+from server.gateways.database.schemas.User import Users
+
 class CalendarEntries(Base):
     __tablename__ = "Calendar"
 
