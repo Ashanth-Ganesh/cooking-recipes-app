@@ -10,7 +10,7 @@ class LoginRequest(BaseModel):
 # login endpoint
 @app.post('http://localhost:8000/login')
 async def login(credentials: LoginRequest):
-    # Check username and password (simplified example)
+    # Check email and password (simplified example)
     if credentials.email == "admin" and credentials.password == "secret123":
         return {
             "message": "Login successful",
