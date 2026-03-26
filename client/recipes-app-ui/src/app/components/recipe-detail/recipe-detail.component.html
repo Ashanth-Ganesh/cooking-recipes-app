@@ -1,0 +1,147 @@
+<div class="detail-page">
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading recipe…</p>
+    </div>
+  } @else if (error) {
+    <div class="container">
+      <div class="alert alert-error">{{ error }}</div>
+      <a routerLink="/recipes" class="btn btn-outline" style="margin-top:16px; display:inline-flex">← Back to Recipes</a>
+    </div>
+  } @else if (recipe) {
+    <!-- Hero -->
+    <div class="recipe-hero" [style.backgroundImage]="'url(' + recipe.image + ')'">
+      <div class="hero-overlay">
+        <div class="container">
+          <a routerLink="/recipes" class="back-link">← Back to Recipes</a>
+          <div class="hero-content">
+            <div class="diet-badges">
+              @for (badge of getDietBadges(); track badge) {
+                <span class="diet-badge">{{ badge }}</span>
+              }
+            </div>
+            <h1 class="recipe-title">{{ recipe.title }}</h1>
+            <div class="recipe-meta">
+              @if (recipe.readyInMinutes) {
+                <span class="meta-chip">⏱ {{ recipe.readyInMinutes }} min</span>
+              }
+              @if (recipe.servings) {
+                <span class="meta-chip">👥 {{ recipe.servings }} servings</span>
+              }
+              @if (getCalories()) {
+                <span class="meta-chip">🔥 {{ getCalories() }} kcal</span>
+              }
+              @if (recipe.healthScore) {
+                <span class="meta-chip score">✦ Health {{ recipe.healthScore | number: '1.0-0' }}</span>
+              }
+            </div>
+            <div class="cuisine-row">
+              @for (c of recipe.cuisines || []; track c) {
+                <span class="cuisine-chip">{{ c }}</span>
+              }
+              @for (t of (recipe.dishTypes || []).slice(0, 2); track t) {
+                <span class="type-chip">{{ t }}</span>
+              }
+            </div>
+          </div>
+          @if (isLoggedIn) {
+            <button
+              class="fav-btn"
+              [class.saved]="isSaved"
+              [disabled]="saving"
+              (click)="toggleFavorite()"
+            >
+              {{ isSaved ? '❤️ Saved' : '🤍 Save Recipe' }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="container recipe-body">
+      <!-- Summary -->
+      @if (recipe.summary) {
+        <div class="summary">{{ stripHtml(recipe.summary) }}</div>
+      }
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button [class.active]="activeTab === 'ingredients'" (click)="activeTab = 'ingredients'">
+          Ingredients
+        </button>
+        <button [class.active]="activeTab === 'instructions'" (click)="activeTab = 'instructions'">
+          Instructions
+        </button>
+        @if (recipe.nutrition) {
+          <button [class.active]="activeTab === 'nutrition'" (click)="activeTab = 'nutrition'">
+            Nutrition
+          </button>
+        }
+      </div>
+
+      <!-- Ingredients Tab -->
+      @if (activeTab === 'ingredients') {
+        <div class="tab-panel">
+          @if ((recipe.extendedIngredients || []).length > 0) {
+            <ul class="ingredients-list">
+              @for (ing of recipe.extendedIngredients || []; track ing.id) {
+                <li class="ingredient-item">
+                  @if (ing.image) {
+                    <img
+                      [src]="'https://spoonacular.com/cdn/ingredients_100x100/' + ing.image"
+                      [alt]="ing.name"
+                      class="ing-img"
+                    />
+                  }
+                  <span>{{ ing.original }}</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="empty-tab">No ingredient data available.</p>
+          }
+        </div>
+      }
+
+      <!-- Instructions Tab -->
+      @if (activeTab === 'instructions') {
+        <div class="tab-panel">
+          @if (getInstructions().length > 0) {
+            <ol class="instructions-list">
+              @for (step of getInstructions(); track $index) {
+                <li class="instruction-step">{{ step }}</li>
+              }
+            </ol>
+          } @else {
+            <p class="empty-tab">No instructions available.</p>
+          }
+        </div>
+      }
+
+      <!-- Nutrition Tab -->
+      @if (activeTab === 'nutrition' && recipe.nutrition) {
+        <div class="tab-panel">
+          <div class="nutrition-grid">
+            @for (n of getKeyNutrients(); track n.name) {
+              <div class="nutrient-card">
+                <div class="nutrient-value">{{ n.amount | number: '1.0-1' }}<span class="unit">{{ n.unit }}</span></div>
+                <div class="nutrient-name">{{ n.name }}</div>
+                @if (n.percentOfDailyNeeds) {
+                  <div class="daily-pct">{{ n.percentOfDailyNeeds | number: '1.0-0' }}% daily</div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (recipe.sourceUrl) {
+        <div class="source-link">
+          <a [href]="recipe.sourceUrl" target="_blank" rel="noopener">View original recipe →</a>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,93 @@
+<div class="home">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Discover Recipes<br />
+        <span class="hero-accent">You'll Love to Cook</span>
+      </h1>
+      <p class="hero-subtitle">
+        Search from thousands of recipes filtered by cuisine, diet, and the ingredients you already have at home.
+      </p>
+      <form class="search-bar" (ngSubmit)="onSearch()">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          name="query"
+          placeholder="Search recipes, ingredients, or cuisines…"
+          class="search-input"
+        />
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+      <div class="hero-tags">
+        <span>Try:</span>
+        <button (click)="navigateCuisine('Italian')">Italian</button>
+        <button (click)="navigateCuisine('Mexican')">Mexican</button>
+        <button (click)="navigateCategory('diet=vegetarian')">Vegetarian</button>
+        <button (click)="navigateCategory('meal_type=dessert')">Desserts</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="emoji-grid">
+        <span>🍝</span><span>🍜</span><span>🥘</span>
+        <span>🌮</span><span>🍣</span><span>🍕</span>
+        <span>🥗</span><span>🍱</span><span>🥞</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cuisines -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Browse by Cuisine</h2>
+      <div class="cuisine-grid">
+        @for (c of cuisines; track c.name) {
+          <button class="cuisine-card" (click)="navigateCuisine(c.name)">
+            <span class="cuisine-emoji">{{ c.emoji }}</span>
+            <span class="cuisine-name">{{ c.name }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Popular Categories</h2>
+      <div class="category-grid">
+        @for (cat of categories; track cat.label) {
+          <a [routerLink]="['/recipes']" [queryParams]="parseFilter(cat.filter)" class="category-card">
+            <span class="category-icon">{{ cat.icon }}</span>
+            <span>{{ cat.label }}</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Search or Browse</h3>
+          <p>Type what you're craving or browse by cuisine, diet, or meal type.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Filter to Your Needs</h3>
+          <p>Apply filters for dietary restrictions, cooking time, and ingredients you have.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Save Your Favorites</h3>
+          <p>Create an account to save recipes and build your personal cookbook.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,71 @@
+<div class="favorites-page">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">My Favorites</h1>
+        <p class="page-sub">Recipes saved by {{ getUsername() }}</p>
+      </div>
+      <a routerLink="/recipes" class="btn btn-outline">Browse More Recipes</a>
+    </div>
+
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading your favorites…</p>
+      </div>
+    } @else if (error) {
+      <div class="alert alert-error">{{ error }}</div>
+    } @else if (favorites.length === 0) {
+      <div class="empty-state">
+        <div class="empty-state-icon">🤍</div>
+        <div class="empty-state-title">No saved recipes yet</div>
+        <div class="empty-state-desc">
+          Browse recipes and click the heart icon to save your favorites here.
+        </div>
+        <a routerLink="/recipes" class="btn btn-primary">Browse Recipes</a>
+      </div>
+    } @else {
+      <p class="count-label">{{ favorites.length }} saved recipe{{ favorites.length !== 1 ? 's' : '' }}</p>
+      <div class="favorites-grid">
+        @for (fav of favorites; track fav.recipe_id) {
+          <div class="fav-card">
+            <div class="fav-image-wrap">
+              <img [src]="getImage(fav)" [alt]="fav.recipe_name" class="fav-image" loading="lazy" />
+              @if (fav.is_custom) {
+                <span class="custom-badge">Custom Recipe</span>
+              }
+            </div>
+            <div class="fav-body">
+              <h3 class="fav-title">{{ fav.recipe_name }}</h3>
+              <div class="fav-meta">
+                @if (fav.ready_in_minutes) {
+                  <span>⏱ {{ fav.ready_in_minutes }} min</span>
+                }
+                @if (fav.servings) {
+                  <span>👥 {{ fav.servings }}</span>
+                }
+                @if (fav.recipe_cuisine) {
+                  <span class="cuisine-tag">{{ fav.recipe_cuisine }}</span>
+                }
+              </div>
+            </div>
+            <div class="fav-actions">
+              @if (!fav.is_custom && fav.spoonacular_id) {
+                <a [routerLink]="['/recipes', fav.spoonacular_id]" class="btn btn-outline btn-sm">
+                  View Recipe
+                </a>
+              }
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="remove(fav.recipe_id)"
+                [disabled]="removing === fav.recipe_id"
+              >
+                @if (removing === fav.recipe_id) { Removing… } @else { Remove }
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
