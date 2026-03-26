@@ -28,7 +28,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in the `server/` directory:
+Create a `.env` file in the `server/` directory (spoonacular_api_key can be found in the microsoft teams Group chat will have to scroll up a bit tho):
 ```env
 POSTGRES_USER=your_db_user
 POSTGRES_PASSWORD=your_db_password
