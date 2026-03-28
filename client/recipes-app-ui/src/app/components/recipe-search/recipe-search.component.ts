@@ -24,6 +24,7 @@ export class RecipeSearchComponent implements OnInit {
   meal_type = '';
   max_ready_time: number | null = null;
   ingredients = '';
+  cooklyCustomOnly = false;
 
   // Results
   recipes: Recipe[] = [];
@@ -116,29 +117,31 @@ export class RecipeSearchComponent implements OnInit {
     this.error = '';
     this.hasSearched = true;
 
-    this.recipeService
-      .search({
-        query: this.query,
-        cuisine: this.cuisine,
-        diet: this.diet,
-        intolerances: this.intolerances.join(','),
-        meal_type: this.meal_type,
-        max_ready_time: this.max_ready_time,
-        ingredients: this.ingredients,
-        number: this.pageSize,
-        offset: this.currentPage * this.pageSize,
-      })
-      .subscribe({
-        next: (result: SearchResult) => {
-          this.recipes = result.results || [];
-          this.totalResults = result.totalResults || 0;
-          this.loading = false;
-        },
-        error: (err) => {
-          this.error = 'Failed to fetch recipes. Please try again.';
-          this.loading = false;
-        },
-      });
+    const obs = this.cooklyCustomOnly
+      ? this.recipeService.getCustomRecipes()
+      : this.recipeService.search({
+          query: this.query,
+          cuisine: this.cuisine,
+          diet: this.diet,
+          intolerances: this.intolerances.join(','),
+          meal_type: this.meal_type,
+          max_ready_time: this.max_ready_time,
+          ingredients: this.ingredients,
+          number: this.pageSize,
+          offset: this.currentPage * this.pageSize,
+        });
+
+    obs.subscribe({
+      next: (result: SearchResult) => {
+        this.recipes = result.results || [];
+        this.totalResults = result.totalResults || 0;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Failed to fetch recipes. Please try again.';
+        this.loading = false;
+      },
+    });
   }
 
   applyFilters(): void {
@@ -155,6 +158,7 @@ export class RecipeSearchComponent implements OnInit {
     this.max_ready_time = null;
     this.ingredients = '';
     this.intolerances = [];
+    this.cooklyCustomOnly = false;
     this.currentPage = 0;
     this.search();
   }
@@ -193,6 +197,6 @@ export class RecipeSearchComponent implements OnInit {
   }
 
   get hasActiveFilters(): boolean {
-    return !!(this.cuisine || this.diet || this.meal_type || this.max_ready_time || this.ingredients || this.intolerances.length);
+    return !!(this.cuisine || this.diet || this.meal_type || this.max_ready_time || this.ingredients || this.intolerances.length || this.cooklyCustomOnly);
   }
 }

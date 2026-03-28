@@ -2,8 +2,10 @@ from fastapi import APIRouter, Query, HTTPException
 from typing import Optional
 
 from services.spoonacularService import search_recipes, get_recipe_detail, find_by_ingredients
+from gateways.database.database import Database
 
 router = APIRouter(tags=["Recipes"])
+db = Database()
 
 
 @router.get("/search")
@@ -34,6 +36,25 @@ async def search(
         raise HTTPException(status_code=502, detail=f"Spoonacular API error: {str(e)}")
 
 
+@router.get("/custom")
+async def get_custom_recipes():
+    recipes = db.get_all_custom_recipes()
+    results = [
+        {
+            "id": r.recipe_id,
+            "title": r.recipe_name,
+            "image": r.image_url or "",
+            "readyInMinutes": r.ready_in_minutes,
+            "servings": r.servings,
+            "cuisines": [r.recipe_cuisine] if r.recipe_cuisine else [],
+            "dishTypes": [r.recipe_type] if r.recipe_type else [],
+            "is_custom": True,
+        }
+        for r in recipes
+    ]
+    return {"results": results, "offset": 0, "number": len(results), "totalResults": len(results)}
+
+
 @router.get("/by-ingredients")
 async def by_ingredients(
     ingredients: str = Query(..., description="Comma-separated ingredient list"),
@@ -47,6 +68,28 @@ async def by_ingredients(
 
 @router.get("/{recipe_id}")
 async def get_recipe(recipe_id: int):
+    custom = db.get_custom_recipe_by_id(recipe_id)
+    if custom:
+        import json as _json
+        try:
+            ingredients = _json.loads(custom.recipe_ingredients or "[]")
+        except Exception:
+            ingredients = []
+        return {
+            "id": custom.recipe_id,
+            "title": custom.recipe_name,
+            "image": custom.image_url or "",
+            "readyInMinutes": custom.ready_in_minutes,
+            "servings": custom.servings,
+            "cuisines": [custom.recipe_cuisine] if custom.recipe_cuisine else [],
+            "dishTypes": [custom.recipe_type] if custom.recipe_type else [],
+            "instructions": custom.recipe_instructions or "",
+            "extendedIngredients": [
+                {"id": i, "name": ing, "original": ing, "amount": 0, "unit": ""}
+                for i, ing in enumerate(ingredients)
+            ],
+            "is_custom": True,
+        }
     try:
         return await get_recipe_detail(recipe_id)
     except Exception as e:

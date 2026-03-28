@@ -216,6 +216,16 @@
   height: 15px;
 }
 
+.cookly-custom-toggle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.cookly-label {
+  color: var(--primary);
+}
+
 .btn-full {
   width: 100%;
   justify-content: center;

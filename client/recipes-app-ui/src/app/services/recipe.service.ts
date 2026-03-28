@@ -39,6 +39,10 @@ export class RecipeService {
     return this.http.get<Recipe>(`${this.API}/${id}`);
   }
 
+  getCustomRecipes(): Observable<SearchResult> {
+    return this.http.get<SearchResult>(`${this.API}/custom`);
+  }
+
   searchByIngredients(ingredients: string, number = 12): Observable<any[]> {
     const p = new HttpParams().set('ingredients', ingredients).set('number', String(number));
     return this.http.get<any[]>(`${this.API}/by-ingredients`, { params: p });

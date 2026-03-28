@@ -34,6 +34,19 @@
         <button class="close-sidebar" (click)="filtersOpen = false">✕</button>
       </div>
 
+      <!-- Cookly Custom Chef Recipes -->
+      <div class="filter-section">
+        <label class="checkbox-item cookly-custom-toggle">
+          <input
+            type="checkbox"
+            [(ngModel)]="cooklyCustomOnly"
+            name="cooklyCustomOnly"
+          />
+          <span class="cookly-label">Cookly Custom Chef Recipes</span>
+        </label>
+        <span class="filter-hint">Show only recipes posted by Cookly chefs</span>
+      </div>
+
       <!-- Ingredients -->
       <div class="filter-section">
         <label class="filter-label">Search by Ingredients</label>

@@ -16,6 +16,7 @@ export interface Recipe {
   vegan?: boolean;
   glutenFree?: boolean;
   dairyFree?: boolean;
+  is_custom?: boolean;
   cheap?: boolean;
   spoonacularScore?: number;
   healthScore?: number;

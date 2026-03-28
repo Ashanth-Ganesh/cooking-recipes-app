@@ -168,6 +168,23 @@ class Database:
         finally:
             session.close()
 
+    def get_all_custom_recipes(self):
+        session = self.get_session()
+        try:
+            return session.query(FavoriteRecipes).filter(FavoriteRecipes.is_custom == True).all()
+        finally:
+            session.close()
+
+    def get_custom_recipe_by_id(self, recipe_id: int):
+        session = self.get_session()
+        try:
+            return session.query(FavoriteRecipes).filter(
+                FavoriteRecipes.recipe_id == recipe_id,
+                FavoriteRecipes.is_custom == True,
+            ).first()
+        finally:
+            session.close()
+
     def remove_favorite(self, recipe_id: int, user_id: int):
         session = self.get_session()
         try:
