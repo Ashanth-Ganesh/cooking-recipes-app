@@ -3,7 +3,7 @@ Web application for Searching and managing cooking recipes
 
 These are instructions to hopefully set this up correctly:
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js & npm
