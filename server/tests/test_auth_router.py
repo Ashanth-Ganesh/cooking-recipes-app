@@ -121,7 +121,7 @@ class TestGetMeEndpoint:
 
     def test_returns_401_without_token(self):
         response = client.get("/api/auth/me")
-        assert response.status_code == 403  # HTTPBearer raises 403 when no credentials
+        assert response.status_code == 401
 
     def test_returns_401_with_invalid_token(self):
         response = client.get(

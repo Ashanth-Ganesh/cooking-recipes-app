@@ -67,7 +67,7 @@ class TestGetFavorites:
 
     def test_returns_403_without_token(self):
         response = client.get("/api/favorites")
-        assert response.status_code == 403
+        assert response.status_code == 401
 
 
 class TestSaveFavorite:
@@ -113,12 +113,12 @@ class TestSaveFavorite:
         assert response.status_code == 400
         assert "already in favorites" in response.json()["detail"]
 
-    def test_returns_403_without_token(self):
+    def test_returns_401_without_token(self):
         response = client.post(
             "/api/favorites",
             json={"spoonacular_id": 1, "recipe_name": "Test"},
         )
-        assert response.status_code == 403
+        assert response.status_code == 401
 
 
 class TestRemoveFavorite:
@@ -141,9 +141,9 @@ class TestRemoveFavorite:
 
         assert response.status_code == 404
 
-    def test_returns_403_without_token(self):
+    def test_returns_401_without_token(self):
         response = client.delete("/api/favorites/10")
-        assert response.status_code == 403
+        assert response.status_code == 401
 
 
 class TestAddCustomRecipe:
@@ -199,9 +199,9 @@ class TestAddCustomRecipe:
         assert response.status_code == 403
         assert "Only chefs and admins" in response.json()["detail"]
 
-    def test_returns_403_without_token(self):
+    def test_returns_401_without_token(self):
         response = client.post(
             "/api/favorites/custom",
             json={"recipe_name": "My Dish", "recipe_instructions": "Cook it."},
         )
-        assert response.status_code == 403
+        assert response.status_code == 401
