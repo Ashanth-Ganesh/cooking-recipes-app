@@ -1,0 +1,44 @@
+<a [routerLink]="['/recipes', recipe.id]" class="card">
+  <div class="card-image-wrap">
+    <img [src]="getImageUrl()" [alt]="recipe.title" class="card-image" loading="lazy" />
+    @if (isLoggedIn) {
+      <button
+        class="heart-btn"
+        [class.saved]="isSaved"
+        [disabled]="saving"
+        (click)="toggleFavorite($event)"
+        [attr.aria-label]="isSaved ? 'Remove from favorites' : 'Save to favorites'"
+      >
+        {{ isSaved ? '❤️' : '🤍' }}
+      </button>
+    }
+    <div class="card-tags">
+      @for (tag of getDietTags(); track tag) {
+        <span class="tag">{{ tag }}</span>
+      }
+    </div>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">{{ recipe.title }}</h3>
+    <div class="card-meta">
+      @if (recipe.readyInMinutes) {
+        <span class="meta-item">
+          <span>⏱</span> {{ recipe.readyInMinutes }} min
+        </span>
+      }
+      @if (recipe.servings) {
+        <span class="meta-item">
+          <span>👥</span> {{ recipe.servings }} servings
+        </span>
+      }
+      @if (recipe.healthScore) {
+        <span class="meta-item score" [class.high]="recipe.healthScore >= 70">
+          ✦ {{ recipe.healthScore | number: '1.0-0' }}
+        </span>
+      }
+    </div>
+    @if (recipe.cuisines && recipe.cuisines.length > 0) {
+      <div class="card-cuisine">{{ recipe.cuisines[0] }}</div>
+    }
+  </div>
+</a>

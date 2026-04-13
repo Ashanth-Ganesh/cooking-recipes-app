@@ -1,0 +1,182 @@
+<div class="search-page">
+  <!-- Top bar -->
+  <div class="search-topbar">
+    <div class="container">
+      <form class="top-search" (ngSubmit)="search()">
+        <span class="search-icon-sm">🔍</span>
+        <input
+          type="text"
+          [(ngModel)]="query"
+          name="query"
+          placeholder="Search recipes…"
+          class="top-search-input"
+        />
+        <button type="submit" class="btn-search">Search</button>
+      </form>
+
+      <div class="top-actions">
+        @if (hasActiveFilters) {
+          <button class="btn-clear" (click)="clearFilters()">✕ Clear Filters</button>
+        }
+        <button class="btn-filter-toggle" (click)="filtersOpen = !filtersOpen">
+          ☰ Filters
+          @if (hasActiveFilters) { <span class="filter-dot"></span> }
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-area container">
+    <!-- Sidebar Filters -->
+    <aside class="sidebar" [class.open]="filtersOpen">
+      <div class="sidebar-header">
+        <h2>Filters</h2>
+        <button class="close-sidebar" (click)="filtersOpen = false">✕</button>
+      </div>
+
+      <!-- Cookly Custom Chef Recipes -->
+      <div class="filter-section">
+        <label class="checkbox-item cookly-custom-toggle">
+          <input
+            type="checkbox"
+            [(ngModel)]="cooklyCustomOnly"
+            name="cooklyCustomOnly"
+          />
+          <span class="cookly-label">Cookly Custom Chef Recipes</span>
+        </label>
+        <span class="filter-hint">Show only recipes posted by Cookly chefs</span>
+      </div>
+
+      <!-- Ingredients -->
+      <div class="filter-section">
+        <label class="filter-label">Search by Ingredients</label>
+        <input
+          type="text"
+          [(ngModel)]="ingredients"
+          name="ingredients"
+          placeholder="e.g. chicken, tomato"
+          class="form-input"
+        />
+        <span class="filter-hint">Comma-separated ingredients you have at home</span>
+      </div>
+
+      <!-- Cuisine -->
+      <div class="filter-section">
+        <label class="filter-label">Cuisine</label>
+        <select [(ngModel)]="cuisine" name="cuisine" class="form-select">
+          <option value="">Any Cuisine</option>
+          @for (c of cuisineOptions; track c) {
+            <option [value]="c">{{ c }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Diet -->
+      <div class="filter-section">
+        <label class="filter-label">Diet</label>
+        <select [(ngModel)]="diet" name="diet" class="form-select">
+          <option value="">Any Diet</option>
+          @for (d of dietOptions; track d.value) {
+            <option [value]="d.value">{{ d.label }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Meal Type -->
+      <div class="filter-section">
+        <label class="filter-label">Meal Type</label>
+        <select [(ngModel)]="meal_type" name="meal_type" class="form-select">
+          <option value="">Any Type</option>
+          @for (t of mealTypeOptions; track t.value) {
+            <option [value]="t.value">{{ t.label }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Max Time -->
+      <div class="filter-section">
+        <label class="filter-label">Cooking Time</label>
+        <select [(ngModel)]="max_ready_time" name="max_ready_time" class="form-select">
+          <option [ngValue]="null">Any Time</option>
+          @for (t of timeOptions; track t.value) {
+            <option [ngValue]="t.value">{{ t.label }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Intolerances -->
+      <div class="filter-section">
+        <label class="filter-label">Exclude Intolerances</label>
+        <div class="checkbox-grid">
+          @for (item of intoleranceOptions; track item) {
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                [checked]="hasIntolerance(item)"
+                (change)="toggleIntolerance(item)"
+              />
+              {{ item }}
+            </label>
+          }
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" (click)="applyFilters()">Apply Filters</button>
+    </aside>
+
+    <!-- Results -->
+    <main class="results">
+      <div class="results-header">
+        @if (hasSearched && !loading) {
+          <p class="results-count">
+            @if (totalResults > 0) {
+              <strong>{{ totalResults | number }}</strong> recipes found
+              @if (query) { for "<em>{{ query }}</em>" }
+            } @else {
+              No recipes found
+            }
+          </p>
+        }
+      </div>
+
+      @if (loading) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Finding delicious recipes…</p>
+        </div>
+      } @else if (error) {
+        <div class="alert alert-error">{{ error }}</div>
+      } @else if (recipes.length === 0 && hasSearched) {
+        <div class="empty-state">
+          <div class="empty-state-icon">🍽️</div>
+          <div class="empty-state-title">No recipes found</div>
+          <div class="empty-state-desc">Try adjusting your search or clearing some filters.</div>
+          <button class="btn btn-primary" (click)="clearFilters()">Clear All Filters</button>
+        </div>
+      } @else {
+        <div class="recipe-grid">
+          @for (recipe of recipes; track recipe.id) {
+            <app-recipe-card [recipe]="recipe" />
+          }
+        </div>
+
+        <!-- Pagination -->
+        @if (totalPages > 1) {
+          <div class="pagination">
+            <button class="page-btn" [disabled]="currentPage === 0" (click)="prevPage()">
+              ← Previous
+            </button>
+            <span class="page-info">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+            <button
+              class="page-btn"
+              [disabled]="(currentPage + 1) * pageSize >= totalResults"
+              (click)="nextPage()"
+            >
+              Next →
+            </button>
+          </div>
+        }
+      }
+    </main>
+  </div>
+</div>

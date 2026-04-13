@@ -1,0 +1,337 @@
+.detail-page {
+  min-height: calc(100vh - 68px);
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 120px 24px;
+  color: var(--text-secondary);
+}
+
+/* ── Hero ─────────────────────────────────────── */
+.recipe-hero {
+  background-size: cover;
+  background-position: center;
+  min-height: 420px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero-overlay {
+  width: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+  padding: 40px 0;
+}
+
+.back-link {
+  display: inline-block;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: white;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.diet-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.diet-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(5, 150, 105, 0.9);
+  color: white;
+}
+
+.recipe-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  font-family: 'Playfair Display', serif;
+}
+
+.recipe-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(4px);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.meta-chip.score {
+  background: rgba(5, 150, 105, 0.6);
+}
+
+.cuisine-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cuisine-chip {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(217, 119, 6, 0.7);
+  color: white;
+  text-transform: capitalize;
+}
+
+.type-chip {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  text-transform: capitalize;
+}
+
+.fav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  border: 2px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.15);
+  color: white;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s;
+}
+
+.fav-btn:hover {
+  background: rgba(255,255,255,0.25);
+  border-color: white;
+}
+
+.fav-btn.saved {
+  background: rgba(255, 80, 80, 0.3);
+  border-color: #fca5a5;
+}
+
+.fav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Body ─────────────────────────────────────── */
+.recipe-body {
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+
+.summary {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 800px;
+}
+
+/* ── Tabs ─────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.tabs button {
+  padding: 12px 24px;
+  border: none;
+  background: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.tabs button:hover {
+  color: var(--primary);
+}
+
+.tabs button.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-panel {
+  max-width: 800px;
+}
+
+.empty-tab {
+  color: var(--text-muted);
+  font-size: 15px;
+  padding: 24px 0;
+}
+
+/* ── Ingredients ─────────────────────────────── */
+.ingredients-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.ing-img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* ── Instructions ────────────────────────────── */
+.instructions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-left: 0;
+}
+
+.instruction-step {
+  display: flex;
+  gap: 16px;
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  counter-increment: step;
+  list-style: decimal inside;
+}
+
+/* ── Nutrition ────────────────────────────────── */
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.nutrient-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+}
+
+.nutrient-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.unit {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+.nutrient-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.daily-pct {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── Source ─────────────────────────────────── */
+.source-link {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.source-link a {
+  font-size: 14px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.source-link a:hover {
+  text-decoration: underline;
+}
+
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 640px) {
+  .recipe-title {
+    font-size: 28px;
+  }
+
+  .recipe-hero {
+    min-height: 300px;
+  }
+
+  .tabs button {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .ingredients-list {
+    grid-template-columns: 1fr;
+  }
+}

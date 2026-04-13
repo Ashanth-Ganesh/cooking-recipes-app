@@ -1,0 +1,138 @@
+<div class="upload-page">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Add Your Recipe</h1>
+        <p class="page-sub">Share your culinary creation with the community</p>
+      </div>
+      <a routerLink="/favorites" class="btn btn-ghost">← My Favorites</a>
+    </div>
+
+    @if (error) {
+      <div class="alert alert-error">{{ error }}</div>
+    }
+    @if (success) {
+      <div class="alert alert-success">{{ success }}</div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="upload-form">
+      <!-- Basic Info -->
+      <section class="form-section">
+        <h2 class="section-heading">Basic Information</h2>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Recipe Name *</label>
+            <input
+              type="text"
+              [(ngModel)]="recipeName"
+              name="recipeName"
+              class="form-input"
+              placeholder="e.g. Grandma's Spaghetti Bolognese"
+            />
+          </div>
+
+          <div class="form-group full">
+            <label class="form-label">Image URL</label>
+            <input
+              type="url"
+              [(ngModel)]="imageUrl"
+              name="imageUrl"
+              class="form-input"
+              placeholder="https://example.com/recipe-image.jpg"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ready in (minutes)</label>
+            <input
+              type="number"
+              [(ngModel)]="readyInMinutes"
+              name="readyInMinutes"
+              class="form-input"
+              placeholder="e.g. 45"
+              min="1"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Servings</label>
+            <input
+              type="number"
+              [(ngModel)]="servings"
+              name="servings"
+              class="form-input"
+              placeholder="e.g. 4"
+              min="1"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Cuisine</label>
+            <select [(ngModel)]="recipeCuisine" name="recipeCuisine" class="form-select">
+              <option value="">Select Cuisine</option>
+              @for (c of cuisineOptions; track c) {
+                <option [value]="c">{{ c }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Meal Type</label>
+            <select [(ngModel)]="recipeType" name="recipeType" class="form-select">
+              <option value="">Select Type</option>
+              @for (t of typeOptions; track t) {
+                <option [value]="t">{{ t | titlecase }}</option>
+              }
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ingredients -->
+      <section class="form-section">
+        <div class="section-header-row">
+          <h2 class="section-heading">Ingredients *</h2>
+          <button type="button" class="btn-add-item" (click)="addIngredient()">+ Add</button>
+        </div>
+        <div class="ingredients-inputs">
+          @for (ing of ingredients; track trackByIndex($index); let i = $index) {
+            <div class="ingredient-row">
+              <span class="ing-num">{{ i + 1 }}</span>
+              <input
+                type="text"
+                [(ngModel)]="ingredients[i]"
+                [name]="'ing' + i"
+                class="form-input"
+                placeholder="e.g. 2 cups all-purpose flour"
+              />
+              @if (ingredients.length > 1) {
+                <button type="button" class="btn-remove-ing" (click)="removeIngredient(i)">✕</button>
+              }
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Instructions -->
+      <section class="form-section">
+        <h2 class="section-heading">Instructions *</h2>
+        <p class="section-hint">Write each step on a new line.</p>
+        <textarea
+          [(ngModel)]="instructions"
+          name="instructions"
+          class="form-input instructions-area"
+          placeholder="Step 1: Preheat oven to 375°F.&#10;Step 2: Mix ingredients together…"
+          rows="10"
+        ></textarea>
+      </section>
+
+      <div class="form-actions">
+        <a routerLink="/favorites" class="btn btn-ghost">Cancel</a>
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          @if (loading) { <span class="btn-spinner"></span> Saving… }
+          @else { Publish Recipe }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

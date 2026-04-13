@@ -1,0 +1,30 @@
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" routerLink="/" (click)="closeMenu()">
+      <span class="brand-icon">🍳</span>
+      <span class="brand-name">Cookly</span>
+    </a>
+
+    <div class="nav-links" [class.open]="menuOpen">
+      <a routerLink="/recipes" routerLinkActive="active" (click)="closeMenu()">Browse Recipes</a>
+      @if (currentUser) {
+        <a routerLink="/favorites" routerLinkActive="active" (click)="closeMenu()">My Favorites</a>
+        @if (isChef()) {
+          <a routerLink="/chef/upload" routerLinkActive="active" (click)="closeMenu()">Add Recipe</a>
+        }
+        <div class="user-menu">
+          <span class="username">{{ currentUser.username }}</span>
+          <span class="role-badge" [class.chef-badge]="isChef()">{{ currentUser.role }}</span>
+          <button class="btn-logout" (click)="logout()">Logout</button>
+        </div>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Login</a>
+        <a routerLink="/signup" class="btn-signup" (click)="closeMenu()">Sign Up</a>
+      }
+    </div>
+
+    <button class="hamburger" (click)="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>

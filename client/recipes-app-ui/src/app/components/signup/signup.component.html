@@ -1,0 +1,98 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <span class="auth-icon">👨‍🍳</span>
+      <h1>Create Account</h1>
+      <p>Start saving your favorite recipes today</p>
+    </div>
+
+    @if (error) {
+      <div class="alert alert-error">{{ error }}</div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          class="form-input"
+          placeholder="Choose a username"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          class="form-input"
+          placeholder="Enter your email"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          class="form-input"
+          placeholder="At least 6 characters"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="confirm">Confirm Password</label>
+        <input
+          id="confirm"
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          class="form-input"
+          placeholder="Repeat your password"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">I am a…</label>
+        <div class="role-options">
+          <label class="role-option" [class.selected]="role === 'user'">
+            <input type="radio" [(ngModel)]="role" name="role" value="user" />
+            <span class="role-icon">🧑</span>
+            <span class="role-text">
+              <strong>Home Cook</strong>
+              <small>Browse & save recipes</small>
+            </span>
+          </label>
+          <label class="role-option" [class.selected]="role === 'chef'">
+            <input type="radio" [(ngModel)]="role" name="role" value="chef" />
+            <span class="role-icon">👨‍🍳</span>
+            <span class="role-text">
+              <strong>Chef</strong>
+              <small>Post your own recipes</small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full" [disabled]="loading">
+        @if (loading) { <span class="btn-spinner"></span> Creating account… }
+        @else { Create Account }
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Already have an account? <a routerLink="/login">Sign in</a>
+    </p>
+  </div>
+</div>
